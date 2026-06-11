@@ -1,0 +1,169 @@
+{% extends 'base.html' %}
+{% block title %}Review Application #{{ application.application_number }} | EduPortal{% endblock %}
+{% block content %}
+<div class="container mx-auto px-gutter py-md">
+    <!-- Page Header -->
+    <div class="mb-lg flex flex-col sm:flex-row justify-between items-start sm:items-end gap-md">
+        <div>
+            <span class="font-label-md text-label-md text-primary uppercase tracking-widest font-bold">Admissions Desk</span>
+            <h1 class="font-display-lg text-display-lg text-on-background mt-1 font-bold">Review Applicant File</h1>
+            <p class="font-body-lg text-body-lg text-on-surface-variant mt-1">
+                Application Number: <span class="text-primary font-bold">{{ application.application_number }}</span>
+            </p>
+        </div>
+        <a href="{% url 'admin_dashboard' %}" class="bg-surface-container border border-outline-variant hover:bg-primary/10 hover:text-primary text-on-surface-variant font-bold px-6 py-3 rounded-lg text-body-sm transition-all flex items-center gap-1 shadow-sm shrink-0">
+            <span class="material-symbols-outlined text-[18px]">arrow_back</span> Back to Console
+        </a>
+    </div>
+
+    <!-- Double-Pane Layout -->
+    <div class="flex flex-col lg:flex-row gap-lg">
+        
+        <!-- Left Pane: Profile Details & Archives (60% Width) -->
+        <div class="w-full lg:w-3/5 space-y-md">
+            
+            <!-- Student Profile Information -->
+            <div class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-lg shadow-sm">
+                <h3 class="font-headline-sm text-headline-sm font-bold text-on-surface mb-md flex items-center gap-xs">
+                    <span class="material-symbols-outlined text-primary">account_box</span> Student Profile Details
+                </h3>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-md border-t border-outline-variant/10 pt-md">
+                    <div>
+                        <span class="text-[10px] text-on-surface-variant uppercase tracking-wider font-bold block">Full Name</span>
+                        <span class="text-body-md text-on-surface font-semibold block mt-0.5">{{ application.student.user.first_name }} {{ application.student.user.last_name }}</span>
+                    </div>
+                    <div>
+                        <span class="text-[10px] text-on-surface-variant uppercase tracking-wider font-bold block">Email Address</span>
+                        <span class="text-body-md text-on-surface font-semibold block mt-0.5 break-all">{{ application.student.user.email }}</span>
+                    </div>
+                    <div>
+                        <span class="text-[10px] text-on-surface-variant uppercase tracking-wider font-bold block">Phone Number</span>
+                        <span class="text-body-md text-on-surface font-semibold block mt-0.5">{{ application.student.phone }}</span>
+                    </div>
+                    <div>
+                        <span class="text-[10px] text-on-surface-variant uppercase tracking-wider font-bold block">Date of Birth</span>
+                        <span class="text-body-md text-on-surface font-semibold block mt-0.5">{{ application.student.dob }}</span>
+                    </div>
+                    <div>
+                        <span class="text-[10px] text-on-surface-variant uppercase tracking-wider font-bold block">Gender</span>
+                        <span class="text-body-md text-on-surface font-semibold block mt-0.5">{{ application.student.gender }}</span>
+                    </div>
+                    <div>
+                        <span class="text-[10px] text-on-surface-variant uppercase tracking-wider font-bold block">Applied Pathway</span>
+                        <span class="text-body-md text-primary font-bold block mt-0.5">{{ application.course.name }} ({{ application.course.code }})</span>
+                    </div>
+                    <div class="sm:col-span-2">
+                        <span class="text-[10px] text-on-surface-variant uppercase tracking-wider font-bold block">Mailing Address</span>
+                        <span class="text-body-md text-on-surface font-semibold block mt-0.5">
+                            {{ application.student.address }}, {{ application.student.city }}, {{ application.student.state }} - {{ application.student.pincode }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Verification Document Archives -->
+            <div class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-lg shadow-sm">
+                <h3 class="font-headline-sm text-headline-sm font-bold text-on-surface mb-md flex items-center gap-xs">
+                    <span class="material-symbols-outlined text-primary">folder_shared</span> Verification Archives
+                </h3>
+                
+                {% if documents %}
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-sm border-t border-outline-variant/10 pt-md">
+                        {% for doc in documents %}
+                            <div class="flex items-center gap-md p-md bg-surface-container border border-outline-variant/30 rounded-xl">
+                                <div class="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                                    <span class="material-symbols-outlined text-[24px]">attachment</span>
+                                </div>
+                                <div class="overflow-hidden flex-grow">
+                                    <span class="font-bold text-on-surface block text-truncate leading-tight">{{ doc.get_document_type_display }}</span>
+                                    <a href="{{ doc.file.url }}" target="_blank" class="text-primary hover:underline text-body-xs font-bold flex items-center gap-0.5 mt-1">
+                                        <span class="material-symbols-outlined text-[14px]">open_in_new</span> Preview File
+                                    </a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="text-center py-8 bg-surface-container-low border border-dashed border-outline-variant/50 rounded-xl flex flex-col items-center justify-center mt-md">
+                        <span class="material-symbols-outlined text-[48px] text-outline">description</span>
+                        <p class="text-body-sm text-on-surface-variant mt-2">No verification documents have been uploaded by the student yet.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Right Pane: Decision Desk & History (40% Width) -->
+        <div class="w-full lg:w-2/5 space-y-md">
+            
+            <!-- Action Decision Desk -->
+            <div class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-lg shadow-sm">
+                <h3 class="font-headline-sm text-headline-sm font-bold text-on-surface mb-md flex items-center gap-xs">
+                    <span class="material-symbols-outlined text-primary">draw</span> Decision Desk
+                </h3>
+                
+                <form method="POST" action="{% url 'admin_application_update' application.id %}" class="space-y-md border-t border-outline-variant/10 pt-md">
+                    {% csrf_token %}
+                    
+                    <div class="space-y-xs">
+                        <label class="font-label-md text-label-md text-on-surface-variant ml-xs">Set Application Status</label>
+                        <select name="status" class="w-full px-md py-2.5 bg-surface-container border-2 border-transparent focus:border-primary focus:bg-white rounded-lg transition-all outline-none text-body-md font-body-md cursor-pointer" required>
+                            <option value="Pending" {% if application.status == 'Pending' %}selected{% endif %}>Pending Review</option>
+                            <option value="Approved" {% if application.status == 'Approved' %}selected{% endif %}>Approve Admission</option>
+                            <option value="Rejected" {% if application.status == 'Rejected' %}selected{% endif %}>Reject Application</option>
+                        </select>
+                    </div>
+                    
+                    <div class="space-y-xs">
+                        <label class="font-label-md text-label-md text-on-surface-variant ml-xs">Decision Remarks / Notes</label>
+                        <textarea name="remarks" rows="4" class="w-full px-md py-2 bg-surface-container border-2 border-transparent focus:border-primary focus:bg-white rounded-lg transition-all outline-none text-body-md font-body-md" placeholder="Enter comments or reason for acceptance/rejection (sent to the student).">{{ application.remarks|default:"" }}</textarea>
+                    </div>
+                    
+                    <button class="w-full py-3 bg-[#FFBA00] hover:bg-[#E6A800] text-on-tertiary-fixed font-headline-sm text-headline-sm font-bold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform active:scale-[0.98] mt-4 flex items-center justify-center gap-1" type="submit">
+                        <span class="material-symbols-outlined">save_as</span> Commit Review Changes
+                    </button>
+                </form>
+            </div>
+
+            <!-- Decision History Timeline -->
+            <div class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-lg shadow-sm">
+                <h3 class="font-headline-sm text-headline-sm font-bold text-on-surface mb-md flex items-center gap-xs">
+                    <span class="material-symbols-outlined text-primary">history</span> Decision History
+                </h3>
+                
+                <div class="border-t border-outline-variant/10 pt-md">
+                    {% if history %}
+                        <div class="relative pl-6 border-l-2 border-outline-variant/30 space-y-lg">
+                            {% for log in history %}
+                                <div class="relative">
+                                    <!-- Node Indicator -->
+                                    <div class="absolute -left-[31px] top-1 w-4 h-4 rounded-full border-2 border-white {% if log.to_status == 'Approved' %}bg-emerald-600{% elif log.to_status == 'Rejected' %}bg-rose-600{% else %}bg-amber-500{% endif %}"></div>
+                                    
+                                    <div>
+                                        <div class="flex items-center justify-between gap-xs">
+                                            <span class="text-body-xs font-bold {% if log.to_status == 'Approved' %}text-emerald-700{% elif log.to_status == 'Rejected' %}text-rose-700{% else %}text-amber-700{% endif %}">
+                                                Transition: {{ log.from_status|default:"Start" }} &rarr; {{ log.to_status }}
+                                            </span>
+                                            <span class="text-[10px] text-on-surface-variant font-semibold shrink-0">{{ log.created_at|date:"Y-m-d H:i" }}</span>
+                                        </div>
+                                        <p class="text-body-xs text-on-surface-variant mt-1 italic">
+                                            "{{ log.remarks|default:'No remarks provided.' }}"
+                                        </p>
+                                        <span class="text-[10px] text-on-surface-variant font-bold block mt-1">
+                                            By: @{{ log.decided_by.username }}
+                                        </span>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="text-center py-6 text-on-surface-variant text-body-xs italic">
+                            No status updates or decisions have been logged for this application file.
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

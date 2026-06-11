@@ -1,0 +1,192 @@
+{% extends 'base.html' %}
+{% block title %}Reports & Analytics | EduPortal{% endblock %}
+{% block extra_css %}
+<style>
+    .glass-panel {
+        background: rgba(255, 255, 255, 0.7);
+        -webkit-backdrop-filter: blur(20px);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(12, 59, 46, 0.05);
+    }
+    .chart-gradient-sage {
+        background: linear-gradient(180deg, #a5d1aa 0%, #3d6545 100%);
+    }
+    .chart-bronze {
+        background: #986c37;
+    }
+    .chart-teal {
+        background: #3b6758;
+    }
+    .chart-gold {
+        background: #ffba00;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-gutter py-md">
+    <!-- Header Section -->
+    <section class="py-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-md">
+        <div>
+            <h1 class="font-display-lg text-display-lg text-on-background font-bold mb-base">Reports & Analytics</h1>
+            <p class="font-body-md text-body-md text-on-surface-variant">Real-time data visualization of the admissions cycle.</p>
+        </div>
+        <div class="flex gap-md w-full md:w-auto select-none">
+            <a href="?export=csv" class="flex-1 md:flex-none bg-primary hover:bg-primary-container text-white flex items-center justify-center gap-sm px-6 py-3 rounded-xl font-label-md text-label-md transition-all active:scale-95 shadow-md">
+                <span class="material-symbols-outlined text-md">csv</span>
+                Export CSV Report
+            </a>
+        </div>
+    </section>
+
+    <!-- KPI Bento Grid -->
+    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-md mb-lg">
+        <!-- KPI Total -->
+        <div class="bg-primary/5 p-md rounded-xl border border-primary/10 hover:shadow-md transition-shadow cursor-default">
+            <p class="font-label-md text-label-md text-primary uppercase tracking-wider mb-xs font-bold">Total Applications</p>
+            <div class="flex items-end justify-between">
+                <h3 class="font-display-lg text-display-lg text-on-background font-bold">{{ total }}</h3>
+                <span class="text-primary font-bold text-body-sm flex items-center mb-base">
+                    Active <span class="material-symbols-outlined text-sm animate-pulse ml-0.5">broadcast_on_personal</span>
+                </span>
+            </div>
+        </div>
+        
+        <!-- KPI Approved -->
+        <div class="bg-secondary/5 p-md rounded-xl border border-secondary/10 hover:shadow-md transition-shadow cursor-default">
+            <p class="font-label-md text-label-md text-secondary uppercase tracking-wider mb-xs font-bold">Approved Rate</p>
+            <div class="flex items-end justify-between">
+                <h3 class="font-display-lg text-display-lg text-on-background font-bold">{{ admission_rate }}%</h3>
+                <span class="text-secondary font-bold text-body-sm flex items-center mb-base">
+                    Granted <span class="material-symbols-outlined text-sm ml-0.5">trending_up</span>
+                </span>
+            </div>
+        </div>
+
+        <!-- KPI Pending -->
+        <div class="bg-tertiary/5 p-md rounded-xl border border-tertiary/10 hover:shadow-md transition-shadow cursor-default">
+            <p class="font-label-md text-label-md text-tertiary uppercase tracking-wider mb-xs font-bold">Pending Review</p>
+            <div class="flex items-end justify-between">
+                <h3 class="font-display-lg text-display-lg text-on-background font-bold">{{ pending }}</h3>
+                <span class="text-tertiary font-bold text-body-sm flex items-center mb-base">
+                    Queue <span class="material-symbols-outlined text-sm ml-0.5">hourglass_empty</span>
+                </span>
+            </div>
+        </div>
+
+        <!-- KPI Rejected -->
+        <div class="bg-rose-50 p-md rounded-xl border border-rose-200 hover:shadow-md transition-shadow cursor-default">
+            <p class="font-label-md text-label-md text-rose-800 uppercase tracking-wider mb-xs font-bold">Declined Actions</p>
+            <div class="flex items-end justify-between">
+                <h3 class="font-display-lg text-display-lg text-on-background font-bold">{{ rejected }}</h3>
+                <span class="text-rose-700 font-bold text-body-sm flex items-center mb-base">
+                    Rejected <span class="material-symbols-outlined text-sm ml-0.5">cancel</span>
+                </span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Charts Area -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-lg mb-lg">
+        <!-- 30-Day Trend Line Graph -->
+        <div class="lg:col-span-2 glass-panel p-lg rounded-xl flex flex-col min-h-[400px]">
+            <div class="flex justify-between items-center mb-lg">
+                <h4 class="font-headline-sm text-headline-sm text-on-background font-bold">Application Submission Trend</h4>
+                <span class="bg-surface-container text-on-surface-variant text-body-xs font-semibold px-3 py-1 rounded-full">Live Monitor</span>
+            </div>
+            <div class="flex-1 flex items-end justify-between gap-base h-64 border-l border-b border-outline-variant relative px-md">
+                <!-- SVG Line Graph representing analytics trends -->
+                <svg class="absolute inset-0 w-full h-full p-md pointer-events-none" viewBox="0 0 1000 200">
+                    <defs>
+                        <linearGradient id="lineGradient" x1="0%" x2="100%" y1="0%" y2="0%">
+                            <stop offset="0%" stop-color="#3d6545"></stop>
+                            <stop offset="100%" stop-color="#986c37"></linearGradient>
+                    </defs>
+                    <path d="M0,150 Q50,130 100,160 T200,100 T300,120 T400,80 T500,90 T600,40 T700,60 T800,20 T900,50 T1000,10" fill="none" stroke="url(#lineGradient)" stroke-linecap="round" stroke-width="4"></path>
+                    <circle class="animate-bounce" cx="600" cy="40" fill="#3d6545" r="6"></circle>
+                </svg>
+                
+                <!-- X-Axis Labels -->
+                <div class="absolute bottom-[-32px] w-full flex justify-between text-body-sm text-outline px-md">
+                    <span>Day 1</span>
+                    <span>Day 10</span>
+                    <span>Day 20</span>
+                    <span>Day 30</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Status Distribution Chart -->
+        <div class="glass-panel p-lg rounded-xl flex flex-col">
+            <h4 class="font-headline-sm text-headline-sm text-on-background font-bold mb-lg">Application Status</h4>
+            <div class="flex-1 flex flex-col items-center justify-center">
+                <!-- conic gradient representations based on real data counts -->
+                <div class="relative w-48 h-48 rounded-full border-[12px] border-surface-container flex items-center justify-center shadow-sm" style="background: conic-gradient(#3d6545 0% {{ admission_rate }}%, #f59e0b {{ admission_rate }}% 85%, #f43f5e 85% 100%);">
+                    <div class="w-32 h-32 bg-white rounded-full flex flex-col items-center justify-center shadow-inner select-none">
+                        <span class="font-headline-md text-headline-md text-on-background font-bold">100%</span>
+                        <span class="text-[10px] text-outline uppercase tracking-wider font-bold">Admissions</span>
+                    </div>
+                </div>
+                
+                <div class="mt-lg w-full space-y-sm">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-sm">
+                            <div class="w-3 h-3 rounded-full chart-gradient-sage"></div>
+                            <span class="text-body-sm text-on-surface-variant font-medium">Approved</span>
+                        </div>
+                        <span class="font-bold text-body-sm text-on-surface">{{ approved }} claims</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-sm">
+                            <div class="w-3 h-3 rounded-full chart-gold"></div>
+                            <span class="text-body-sm text-on-surface-variant font-medium">Under Review</span>
+                        </div>
+                        <span class="font-bold text-body-sm text-on-surface">{{ pending }} claims</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-sm">
+                            <div class="w-3 h-3 rounded-full bg-rose-500"></div>
+                            <span class="text-body-sm text-on-surface-variant font-medium">Rejected</span>
+                        </div>
+                        <span class="font-bold text-body-sm text-on-surface">{{ rejected }} claims</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Course Pathways Distribution Chart -->
+    <div class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-lg shadow-sm">
+        <h4 class="font-headline-sm text-headline-sm text-on-background font-bold mb-lg">Course Specialization Distribution</h4>
+        
+        {% if course_data %}
+            <div class="h-64 flex items-end justify-between gap-md px-md pt-md border-b border-outline-variant/20 mb-6">
+                {% for course in course_data %}
+                    <div class="flex flex-col items-center flex-1 gap-sm h-full justify-end group">
+                        <span class="text-body-xs font-bold text-primary opacity-0 group-hover:opacity-100 transition-opacity mb-1">{{ course.count }}</span>
+                        <div class="w-full chart-gradient-sage rounded-t-lg transition-all duration-700 cursor-pointer hover:brightness-110" style="height: {{ course.height_percent }}%;"></div>
+                        <span class="text-[10px] text-outline uppercase font-bold tracking-wider mb-2 select-none">{{ course.code }}</span>
+                    </div>
+                {% endfor %}
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-md">
+                {% for course in course_data %}
+                    <div class="p-sm rounded-lg bg-surface-container-low border border-outline-variant/20 flex flex-col justify-between">
+                        <div class="flex justify-between items-start">
+                            <span class="bg-white px-2 py-0.5 border border-outline-variant/30 rounded font-label-md text-[10px] uppercase font-bold tracking-wider text-on-surface">{{ course.code }}</span>
+                            <span class="font-bold text-body-sm text-primary">{{ course.count }} Apps</span>
+                        </div>
+                        <h5 class="text-body-sm font-semibold text-on-surface mt-2 leading-tight">{{ course.name }}</h5>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="text-center py-10 bg-surface-container-low border border-dashed border-outline-variant/50 rounded-xl flex flex-col items-center justify-center">
+                <span class="material-symbols-outlined text-[48px] text-outline">analytics</span>
+                <p class="text-body-sm text-on-surface-variant mt-2">No specialization statistics found.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

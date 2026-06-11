@@ -1,0 +1,172 @@
+{% extends 'base.html' %}
+{% block title %}Verify Profile Credentials | EduPortal{% endblock %}
+{% block content %}
+<div class="container mx-auto px-gutter py-md">
+    <!-- Page Header -->
+    <div class="mb-lg flex flex-col md:flex-row justify-between items-start md:items-end gap-md">
+        <div>
+            <span class="font-label-md text-label-md text-primary uppercase tracking-widest font-bold">Step 2 of 2: Verification Documents</span>
+            <h1 class="font-display-lg text-display-lg text-on-background mt-1 font-bold">Upload Verification Documents</h1>
+            <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mt-1">
+                Application Number: <span class="text-primary font-bold">{{ application.application_number }}</span>
+            </p>
+        </div>
+        <a href="{% url 'status' %}" class="bg-surface-container border border-outline-variant hover:bg-primary/10 hover:text-primary text-on-surface-variant font-bold px-6 py-3 rounded-lg text-body-sm transition-all flex items-center gap-1 shadow-sm shrink-0">
+            Check Application Status <span class="material-symbols-outlined text-[18px]">arrow_right_alt</span>
+        </a>
+    </div>
+
+    <div class="flex flex-col lg:flex-row gap-lg">
+        <!-- Left: Upload Form Panel (40% Width) -->
+        <div class="w-full lg:w-2/5">
+            <div class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-lg shadow-sm flex flex-col">
+                <div class="mb-md">
+                    <h3 class="font-headline-sm text-headline-sm font-bold text-on-surface">Upload Document</h3>
+                    <p class="font-body-sm text-body-sm text-on-surface-variant">Select a document category and choose your file to upload.</p>
+                </div>
+                
+                <form method="POST" enctype="multipart/form-data" class="space-y-md">
+                    {% csrf_token %}
+                    
+                    <div class="space-y-xs">
+                        <label class="font-label-md text-label-md text-on-surface-variant ml-xs">Document Category</label>
+                        <select name="document_type" id="id_document_type" class="w-full px-md py-2.5 bg-surface-container border-2 border-transparent focus:border-primary focus:bg-white rounded-lg transition-all outline-none text-body-md font-body-md cursor-pointer" title="Document Category" required>
+                            {% for choice in form.fields.document_type.choices %}
+                                <option value="{{ choice.0 }}" {% if not choice.0 %}disabled selected{% endif %}>{{ choice.1 }}</option>
+                            {% endfor %}
+                        </select>
+                        {% if form.document_type.errors %}
+                            <p class="text-error text-body-xs mt-0.5">{{ form.document_type.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="space-y-xs">
+                        <label class="font-label-md text-label-md text-on-surface-variant ml-xs">Choose File (PDF or Image)</label>
+                        <div class="relative flex items-center justify-center w-full">
+                            <label class="flex flex-col items-center justify-center w-full h-36 border-2 border-dashed border-outline-variant/50 hover:border-primary/50 rounded-xl cursor-pointer bg-surface-container-low hover:bg-surface-container-high/50 transition-colors py-4">
+                                <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                    <span class="material-symbols-outlined text-[36px] text-on-surface-variant mb-1">cloud_upload</span>
+                                    <p class="text-body-xs text-on-surface-variant"><span class="font-bold text-primary">Click to upload</span> or drag and drop</p>
+                                    <p class="text-[10px] text-on-surface-variant/70 mt-0.5">PDF, PNG, JPG, or GIF (max. 5MB)</p>
+                                </div>
+                                <input id="id_file" type="file" name="file" class="hidden" required onchange="updateFileName(this)" />
+                            </label>
+                        </div>
+                        <div id="file-name-display" class="hidden text-body-sm font-semibold text-primary flex items-center gap-1 mt-1">
+                            <span class="material-symbols-outlined text-[18px]">attachment</span>
+                            <span id="file-name-text">filename.pdf</span>
+                        </div>
+                        {% if form.file.errors %}
+                            <p class="text-error text-body-xs mt-0.5">{{ form.file.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <button class="w-full py-3 bg-[#FFBA00] hover:bg-[#E6A800] text-on-tertiary-fixed font-headline-sm text-headline-sm font-bold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform active:scale-[0.98] mt-4 flex items-center justify-center gap-1" type="submit">
+                        <span class="material-symbols-outlined">cloud_upload</span> Upload File
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Right: Status & Archives Panel (60% Width) -->
+        <div class="flex-grow flex flex-col gap-md">
+            <!-- Verification Checklist -->
+            <div class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-lg shadow-sm">
+                <div class="mb-md">
+                    <h3 class="font-headline-sm text-headline-sm font-bold text-on-surface">Verification Checklist</h3>
+                </div>
+                
+                {% if is_complete %}
+                    <div class="flex items-start gap-sm p-md rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 mb-lg">
+                        <span class="material-symbols-outlined text-[24px]">verified</span>
+                        <div class="font-body-sm text-body-sm">
+                            <span class="font-bold block">All Documents Uploaded!</span>
+                            Your application is now complete and will be reviewed by the admissions officer.
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="flex items-start gap-sm p-md rounded-xl bg-amber-50 border border-amber-200 text-amber-800 mb-lg">
+                        <span class="material-symbols-outlined text-[24px]">warning</span>
+                        <div class="font-body-sm text-body-sm">
+                            <span class="font-bold block">Action Required</span>
+                            Please upload all required files to complete your admission process.
+                        </div>
+                    </div>
+                {% endif %}
+                
+                <div class="divide-y divide-outline-variant/10">
+                    {% for type in form.fields.document_type.choices %}
+                        {% if type.0 %}
+                            <div class="flex justify-between items-center py-3">
+                                <div class="flex items-center gap-sm">
+                                    {% if type.0 in missing_types or not uploaded_docs %}
+                                        <span class="material-symbols-outlined text-outline">radio_button_unchecked</span>
+                                        <span class="font-body-sm text-on-surface-variant">{{ type.1 }}</span>
+                                    {% else %}
+                                        <span class="material-symbols-outlined text-emerald-600 material-symbols-filled">check_circle</span>
+                                        <span class="font-body-sm text-on-surface font-semibold">{{ type.1 }}</span>
+                                    {% endif %}
+                                </div>
+                                <div>
+                                    {% if type.0 in missing_types or not uploaded_docs %}
+                                        <span class="bg-surface-container text-on-surface-variant font-label-md text-[10px] uppercase tracking-wider font-bold px-3 py-1 rounded-full border border-outline-variant/30">Missing</span>
+                                    {% else %}
+                                        <span class="bg-emerald-50 text-emerald-800 border border-emerald-200 font-label-md text-[10px] uppercase tracking-wider font-bold px-3 py-1 rounded-full">Uploaded</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <!-- Uploaded Files Archive -->
+            <div class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-lg shadow-sm flex-grow">
+                <div class="mb-md">
+                    <h3 class="font-headline-sm text-headline-sm font-bold text-on-surface">Uploaded Archives</h3>
+                </div>
+                
+                {% if uploaded_docs %}
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-sm">
+                        {% for doc in uploaded_docs %}
+                            <div class="flex items-center gap-md p-md bg-surface-container border border-outline-variant/30 rounded-xl">
+                                <div class="w-12 h-12 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center shrink-0">
+                                    <span class="material-symbols-outlined text-[28px]">verified_user</span>
+                                </div>
+                                <div class="overflow-hidden flex-grow">
+                                    <span class="font-bold text-on-surface block text-truncate leading-tight">{{ doc.get_document_type_display }}</span>
+                                    <span class="text-body-xs text-on-surface-variant font-semibold block mt-0.5">Uploaded: {{ doc.uploaded_at|date:"Y-m-d" }}</span>
+                                    <a href="{{ doc.file.url }}" target="_blank" class="text-primary hover:underline text-body-xs font-bold flex items-center gap-0.5 mt-1">
+                                        <span class="material-symbols-outlined text-[14px]">visibility</span> View File
+                                    </a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="text-center py-10 bg-surface-container-low border border-dashed border-outline-variant/50 rounded-xl flex flex-col items-center justify-center">
+                        <span class="material-symbols-outlined text-[48px] text-outline">folder_open</span>
+                        <p class="text-body-sm text-on-surface-variant mt-2">No file archives found. Upload files to display them here.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function updateFileName(input) {
+        const display = document.getElementById('file-name-display');
+        const text = document.getElementById('file-name-text');
+        
+        if (input.files && input.files[0]) {
+            text.innerText = input.files[0].name;
+            display.classList.remove('hidden');
+        } else {
+            display.classList.add('hidden');
+        }
+    }
+</script>
+{% endblock %}

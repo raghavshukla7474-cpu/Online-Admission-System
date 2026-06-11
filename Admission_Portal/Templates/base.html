@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>{% block title %}EduPortal | University Admissions{% endblock %}</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+    
+    <!-- Material Symbols Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    
+    <!-- Custom Style Settings for Organic Academic Theme -->
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-fixed-variant": "#274f31",
+                        "on-primary-fixed": "#00210b",
+                        "on-error-container": "#93000a",
+                        "surface-variant": "#e2e3e0",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed": "#ffddba",
+                        "primary-fixed-dim": "#a5d1aa",
+                        "on-tertiary-container": "#fffbff",
+                        "surface-container-low": "#f4f4f1",
+                        "on-secondary": "#ffffff",
+                        "tertiary": "#7c5321",
+                        "surface-container-highest": "#e2e3e0",
+                        "on-secondary-container": "#416d5d",
+                        "surface": "#f9f9f6",
+                        "surface-tint": "#3f6747",
+                        "tertiary-fixed-dim": "#f3bc7f",
+                        "surface-container": "#eeeeeb",
+                        "secondary": "#3b6758",
+                        "on-secondary-fixed-variant": "#234e40",
+                        "on-background": "#1a1c1b",
+                        "on-secondary-fixed": "#002117",
+                        "inverse-surface": "#2f312f",
+                        "on-surface": "#1a1c1b",
+                        "on-primary": "#ffffff",
+                        "on-tertiary-fixed-variant": "#643f0c",
+                        "primary": "#3d6545",
+                        "primary-container": "#557e5c",
+                        "surface-container-high": "#e8e8e5",
+                        "on-surface-variant": "#424941",
+                        "surface-dim": "#dadad7",
+                        "primary-fixed": "#c0eec5",
+                        "on-tertiary-fixed": "#2b1700",
+                        "tertiary-container": "#986c37",
+                        "secondary-fixed-dim": "#a2d0be",
+                        "secondary-container": "#beedd9",
+                        "secondary-fixed": "#beedd9",
+                        "on-tertiary": "#ffffff",
+                        "background": "#f9f9f6",
+                        "outline-variant": "#c1c8bf",
+                        "outline": "#727971",
+                        "error": "#ba1a1a",
+                        "inverse-primary": "#a5d1aa",
+                        "on-primary-container": "#f7fff3",
+                        "on-error": "#ffffff",
+                        "surface-bright": "#f9f9f6",
+                        "inverse-on-surface": "#f1f1ee"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xl": "80px",
+                        "gutter": "24px",
+                        "lg": "48px",
+                        "md": "24px",
+                        "container-max": "1440px",
+                        "base": "8px",
+                        "sm": "12px",
+                        "xs": "4px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "label-md": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "headline-lg-mobile": ["Plus Jakarta Sans"],
+                        "headline-sm": ["Plus Jakarta Sans"],
+                        "body-sm": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                        "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .hero-overlay {
+            background: linear-gradient(135deg, rgba(12, 59, 46, 0.92) 0%, rgba(12, 59, 46, 0.7) 100%);
+        }
+        .primary-gradient {
+            background: linear-gradient(135deg, #3d6545 0%, #0c3b2e 100%);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-filled {
+            font-variation-settings: 'FILL' 1;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #3d6545;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #eeeeeb;
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="bg-surface font-body-md text-on-surface selection:bg-primary-fixed selection:text-on-primary-fixed overflow-x-hidden flex flex-col min-h-screen">
+
+    <!-- Header / Navbar -->
+    <header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-gutter h-20 bg-surface/70 backdrop-blur-md border-b border-outline-variant/20 shadow-sm">
+        <a class="flex items-center gap-xs" href="{% url 'index' %}">
+            <!-- Shield Logo SVG -->
+            <svg class="h-10 w-10" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="200" height="200" rx="40" fill="#0C3B2E"/>
+                <path d="M100 45L40 75L100 105L160 75L100 45Z" fill="#FFBA00"/>
+                <path d="M40 75V125C40 125 40 155 100 155C160 155 160 125 160 125V75L100 105L40 75Z" fill="#6D9773"/>
+                <circle cx="100" cy="100" r="15" fill="#BB8A52" opacity="0.8"/>
+            </svg>
+            <span class="font-headline-md text-headline-md font-bold text-primary tracking-tight">EduPortal</span>
+        </a>
+        
+        <!-- Desktop Nav Menu -->
+        <nav class="hidden md:flex items-center gap-lg">
+            <a class="font-body-md text-body-md transition-colors duration-200 py-1 hover:text-primary {% if request.resolver_match.url_name == 'index' %}text-primary font-bold border-b-2 border-primary{% else %}text-on-surface-variant font-medium{% endif %}" href="{% url 'index' %}">Home</a>
+            {% if user.is_authenticated %}
+                {% if user.is_staff or user.admin_profile %}
+                    <a class="font-body-md text-body-md transition-colors duration-200 py-1 hover:text-primary {% if request.resolver_match.url_name == 'admin_dashboard' %}text-primary font-bold border-b-2 border-primary{% else %}text-on-surface-variant font-medium{% endif %}" href="{% url 'admin_dashboard' %}">Admin Panel</a>
+                    <a class="font-body-md text-body-md transition-colors duration-200 py-1 hover:text-primary {% if request.resolver_match.url_name == 'admin_reports' %}text-primary font-bold border-b-2 border-primary{% else %}text-on-surface-variant font-medium{% endif %}" href="{% url 'admin_reports' %}">Reports</a>
+                    <a class="font-body-md text-body-md transition-colors duration-200 py-1 hover:text-primary {% if request.resolver_match.url_name == 'contact_messages' %}text-primary font-bold border-b-2 border-primary{% else %}text-on-surface-variant font-medium{% endif %}" href="{% url 'contact_messages' %}">Inquiries</a>
+                {% else %}
+                    <a class="font-body-md text-body-md transition-colors duration-200 py-1 hover:text-primary {% if request.resolver_match.url_name == 'dashboard' %}text-primary font-bold border-b-2 border-primary{% else %}text-on-surface-variant font-medium{% endif %}" href="{% url 'dashboard' %}">Dashboard</a>
+                    <a class="font-body-md text-body-md transition-colors duration-200 py-1 hover:text-primary {% if request.resolver_match.url_name == 'apply' %}text-primary font-bold border-b-2 border-primary{% else %}text-on-surface-variant font-medium{% endif %}" href="{% url 'apply' %}">Apply</a>
+                    <a class="font-body-md text-body-md transition-colors duration-200 py-1 hover:text-primary {% if request.resolver_match.url_name == 'upload' %}text-primary font-bold border-b-2 border-primary{% else %}text-on-surface-variant font-medium{% endif %}" href="{% url 'upload' %}">Documents</a>
+                    <a class="font-body-md text-body-md transition-colors duration-200 py-1 hover:text-primary {% if request.resolver_match.url_name == 'status' %}text-primary font-bold border-b-2 border-primary{% else %}text-on-surface-variant font-medium{% endif %}" href="{% url 'status' %}">Track Status</a>
+                {% endif %}
+            {% endif %}
+            <a class="font-body-md text-body-md transition-colors duration-200 py-1 hover:text-primary {% if request.resolver_match.url_name == 'contact' %}text-primary font-bold border-b-2 border-primary{% else %}text-on-surface-variant font-medium{% endif %}" href="{% url 'contact' %}">Contact Us</a>
+            <a class="font-body-md text-body-md transition-colors duration-200 py-1 hover:text-primary {% if request.resolver_match.url_name == 'about' %}text-primary font-bold border-b-2 border-primary{% else %}text-on-surface-variant font-medium{% endif %}" href="{% url 'about' %}">About Us</a>
+        </nav>
+
+        <!-- Right Menu Actions -->
+        <div class="flex items-center gap-md">
+            {% if user.is_authenticated %}
+                <div class="hidden lg:flex flex-col text-right">
+                    <span class="text-body-sm font-semibold text-on-surface leading-tight">{{ user.first_name }} {{ user.last_name }}</span>
+                    <span class="text-[11px] text-on-surface-variant uppercase tracking-wider">
+                        {% if user.is_staff or user.admin_profile %}Admin Access{% else %}Student Portal{% endif %}
+                    </span>
+                </div>
+                <div class="h-10 w-10 rounded-full bg-secondary-container flex items-center justify-center overflow-hidden border border-outline-variant select-none">
+                    <span class="material-symbols-outlined text-secondary text-[24px]">account_circle</span>
+                </div>
+                <a class="bg-surface-container border border-outline-variant hover:bg-error-container/20 hover:text-error hover:border-error/30 text-on-surface-variant font-bold px-4 py-2 rounded-full text-body-sm transition-all duration-300" href="{% url 'logout' %}">
+                    Logout
+                </a>
+            {% else %}
+                <a class="text-on-surface-variant hover:text-primary font-bold text-body-sm py-2 px-4 transition-colors" href="{% url 'login' %}">Sign In</a>
+                <a class="bg-[#FFBA00] hover:bg-[#E6A800] text-on-tertiary-fixed font-extrabold text-body-sm py-2.5 px-5 rounded-full transition-all duration-300 active:scale-95 shadow-sm" href="{% url 'register' %}">
+                    Register Now
+                </a>
+            {% endif %}
+            
+            <!-- Mobile Menu Toggle -->
+            <button class="md:hidden flex items-center justify-center p-1 text-on-surface-variant focus:outline-none" id="mobileMenuButton">
+                <span class="material-symbols-outlined text-[28px]" id="mobileMenuIcon">menu</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Navigation Drawer -->
+    <div class="fixed inset-0 z-40 hidden" id="mobileMenuDrawer">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" id="mobileMenuBackdrop"></div>
+        <!-- Content Panel -->
+        <div class="absolute top-20 left-0 w-full bg-surface border-b border-outline-variant/30 px-gutter py-md flex flex-col gap-md shadow-lg animate-in slide-in-from-top-10 duration-200">
+            <a class="font-body-md text-body-md py-2 border-b border-outline-variant/10 hover:text-primary {% if request.resolver_match.url_name == 'index' %}text-primary font-bold{% else %}text-on-surface-variant{% endif %}" href="{% url 'index' %}">Home</a>
+            {% if user.is_authenticated %}
+                {% if user.is_staff or user.admin_profile %}
+                    <a class="font-body-md text-body-md py-2 border-b border-outline-variant/10 hover:text-primary {% if request.resolver_match.url_name == 'admin_dashboard' %}text-primary font-bold{% else %}text-on-surface-variant{% endif %}" href="{% url 'admin_dashboard' %}">Admin Panel</a>
+                    <a class="font-body-md text-body-md py-2 border-b border-outline-variant/10 hover:text-primary {% if request.resolver_match.url_name == 'admin_reports' %}text-primary font-bold{% else %}text-on-surface-variant{% endif %}" href="{% url 'admin_reports' %}">Reports</a>
+                    <a class="font-body-md text-body-md py-2 border-b border-outline-variant/10 hover:text-primary {% if request.resolver_match.url_name == 'contact_messages' %}text-primary font-bold{% else %}text-on-surface-variant{% endif %}" href="{% url 'contact_messages' %}">Inquiries</a>
+                {% else %}
+                    <a class="font-body-md text-body-md py-2 border-b border-outline-variant/10 hover:text-primary {% if request.resolver_match.url_name == 'dashboard' %}text-primary font-bold{% else %}text-on-surface-variant{% endif %}" href="{% url 'dashboard' %}">Dashboard</a>
+                    <a class="font-body-md text-body-md py-2 border-b border-outline-variant/10 hover:text-primary {% if request.resolver_match.url_name == 'apply' %}text-primary font-bold{% else %}text-on-surface-variant{% endif %}" href="{% url 'apply' %}">Apply Now</a>
+                    <a class="font-body-md text-body-md py-2 border-b border-outline-variant/10 hover:text-primary {% if request.resolver_match.url_name == 'upload' %}text-primary font-bold{% else %}text-on-surface-variant{% endif %}" href="{% url 'upload' %}">Upload Documents</a>
+                    <a class="font-body-md text-body-md py-2 border-b border-outline-variant/10 hover:text-primary {% if request.resolver_match.url_name == 'status' %}text-primary font-bold{% else %}text-on-surface-variant{% endif %}" href="{% url 'status' %}">Track Status</a>
+                {% endif %}
+                <a class="font-body-md text-body-md py-2 border-b border-outline-variant/10 hover:text-primary {% if request.resolver_match.url_name == 'contact' %}text-primary font-bold{% else %}text-on-surface-variant{% endif %}" href="{% url 'contact' %}">Contact Us</a>
+                <a class="font-body-md text-body-md py-2 border-b border-outline-variant/10 hover:text-primary {% if request.resolver_match.url_name == 'about' %}text-primary font-bold{% else %}text-on-surface-variant{% endif %}" href="{% url 'about' %}">About Us</a>
+                <div class="flex items-center justify-between py-2 mt-2">
+                    <span class="text-body-sm text-on-surface-variant font-medium">Logged in as: {{ user.username }}</span>
+                    <a class="text-error text-body-sm font-bold" href="{% url 'logout' %}">Sign Out</a>
+                </div>
+            {% else %}
+                <a class="font-body-md text-body-md py-2 border-b border-outline-variant/10 hover:text-primary {% if request.resolver_match.url_name == 'contact' %}text-primary font-bold{% else %}text-on-surface-variant{% endif %}" href="{% url 'contact' %}">Contact Us</a>
+                <a class="font-body-md text-body-md py-2 border-b border-outline-variant/10 hover:text-primary {% if request.resolver_match.url_name == 'about' %}text-primary font-bold{% else %}text-on-surface-variant{% endif %}" href="{% url 'about' %}">About Us</a>
+                <div class="flex flex-col gap-sm py-2">
+                    <a class="w-full text-center py-2 border border-outline-variant rounded-lg font-bold text-on-surface-variant" href="{% url 'login' %}">Sign In</a>
+                    <a class="w-full text-center py-2.5 bg-[#FFBA00] text-on-tertiary-fixed font-extrabold rounded-lg shadow-sm" href="{% url 'register' %}">Register Now</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Django Message Alerts -->
+    {% if messages %}
+    <div class="fixed top-24 right-4 z-50 flex flex-col gap-2 max-w-md w-full px-4 sm:px-0">
+        {% for message in messages %}
+        <div class="flex items-center gap-sm p-md rounded-xl border shadow-lg backdrop-blur-md animate-in fade-in slide-in-from-right-10 duration-300 {% if message.tags == 'success' %}bg-emerald-50 border-emerald-200 text-emerald-800{% elif message.tags == 'warning' %}bg-amber-50 border-amber-200 text-amber-800{% elif message.tags == 'error' %}bg-rose-50 border-rose-200 text-rose-800{% else %}bg-sky-50 border-sky-200 text-sky-800{% endif %}" id="alert-{{ forloop.counter }}">
+            <span class="material-symbols-outlined text-[24px]">
+                {% if message.tags == 'success' %}check_circle{% elif message.tags == 'warning' %}warning{% elif message.tags == 'error' %}error{% else %}info{% endif %}
+            </span>
+            <div class="flex-grow font-body-sm text-body-sm font-semibold">
+                {{ message }}
+            </div>
+            <button class="material-symbols-outlined text-[18px] opacity-60 hover:opacity-100 cursor-pointer" onclick="document.getElementById('alert-{{ forloop.counter }}').remove()">close</button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Main Content Area -->
+    <main class="flex-grow pt-20">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-surface-container-lowest border-t border-outline-variant/20 py-lg px-gutter mt-auto flex flex-col md:flex-row justify-between items-center gap-md">
+        <div class="flex flex-col md:items-start items-center gap-xs text-center md:text-left">
+            <div class="flex items-center gap-xs">
+                <svg class="h-8 w-8" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="200" height="200" rx="40" fill="#0C3B2E"/>
+                    <path d="M100 45L40 75L100 105L160 75L100 45Z" fill="#FFBA00"/>
+                    <path d="M40 75V125C40 125 40 155 100 155C160 155 160 125 160 125V75L100 105L40 75Z" fill="#6D9773"/>
+                    <circle cx="100" cy="100" r="15" fill="#BB8A52" opacity="0.8"/>
+                </svg>
+                <span class="font-headline-sm text-headline-sm font-bold text-primary">EduPortal</span>
+            </div>
+            <p class="text-on-surface-variant text-body-sm max-w-sm">Nurturing academic excellence, character, and global leadership since 1985.</p>
+        </div>
+        
+        <div class="flex flex-wrap justify-center gap-lg text-body-sm font-semibold text-on-surface-variant">
+            <a class="hover:text-primary transition-colors" href="{% url 'index' %}">Home</a>
+            <a class="hover:text-primary transition-colors" href="{% url 'about' %}">About Us</a>
+            <a class="hover:text-primary transition-colors" href="{% url 'register' %}">Admissions</a>
+            <a class="hover:text-primary transition-colors" href="{% url 'contact' %}">Contact Us</a>
+            <a class="hover:text-primary transition-colors" href="#">Security Policy</a>
+            <a class="hover:text-primary transition-colors" href="#">Support Center</a>
+        </div>
+        
+        <div class="text-center md:text-right text-on-surface-variant text-body-sm flex flex-col gap-xs">
+            <span>&copy; 2026 EduPortal. All rights reserved.</span>
+            <span class="text-[11px] opacity-70">Designed by me.</span>
+        </div>
+    </footer>
+
+    <!-- Global Javascript UI Toggles -->
+    <script>
+        // Toggle mobile nav menu drawer
+        const mobileMenuButton = document.getElementById('mobileMenuButton');
+        const mobileMenuDrawer = document.getElementById('mobileMenuDrawer');
+        const mobileMenuBackdrop = document.getElementById('mobileMenuBackdrop');
+        const mobileMenuIcon = document.getElementById('mobileMenuIcon');
+
+        if (mobileMenuButton && mobileMenuDrawer) {
+            mobileMenuButton.addEventListener('click', () => {
+                const isHidden = mobileMenuDrawer.classList.contains('hidden');
+                if (isHidden) {
+                    mobileMenuDrawer.classList.remove('hidden');
+                    mobileMenuIcon.textContent = 'close';
+                } else {
+                    mobileMenuDrawer.classList.add('hidden');
+                    mobileMenuIcon.textContent = 'menu';
+                }
+            });
+            
+            mobileMenuBackdrop.addEventListener('click', () => {
+                mobileMenuDrawer.classList.add('hidden');
+                mobileMenuIcon.textContent = 'menu';
+            });
+        }
+
+        // Auto remove alerts after 5 seconds
+        setTimeout(() => {
+            const messages = document.querySelectorAll('[id^="alert-"]');
+            messages.forEach(msg => {
+                msg.classList.add('fade-out', 'transition-opacity', 'duration-500');
+                msg.style.opacity = '0';
+                setTimeout(() => msg.remove(), 500);
+            });
+        }, 5000);
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

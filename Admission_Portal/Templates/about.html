@@ -1,0 +1,190 @@
+{% extends 'base.html' %}
+{% block title %}About Us | EduPortal{% endblock %}
+{% block extra_css %}
+<style>
+    .glass-card {
+        background: rgba(255, 255, 255, 0.7);
+        -webkit-backdrop-filter: blur(20px);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    .timeline-dot {
+        position: relative;
+    }
+    .timeline-dot::after {
+        content: '';
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #FFBA00;
+        border: 3px solid #ffffff;
+        left: 50%;
+        top: 0;
+        transform: translateX(-50%);
+        box-shadow: 0 0 10px rgba(255, 186, 0, 0.5);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Banner Section -->
+<section class="relative py-xl overflow-hidden mb-lg">
+    <div class="absolute inset-0 primary-gradient -z-10"></div>
+    <div class="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+    <div class="absolute bottom-0 left-0 w-64 h-64 bg-secondary-fixed/10 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2"></div>
+    
+    <div class="container mx-auto px-gutter text-center relative z-20">
+        <span class="inline-block px-4 py-1 bg-white/10 text-[#FFBA00] font-label-md text-label-md rounded-full mb-md border border-[#FFBA00]/30 backdrop-blur-sm">Establishing Legacy Since 1985</span>
+        <h1 class="font-display-lg text-display-lg md:text-[56px] text-white leading-tight mb-md">
+            Shaping the Minds of <span class="text-[#FFBA00]">Tomorrow</span>
+        </h1>
+        <p class="font-body-lg text-body-lg text-primary-fixed/80 max-w-2xl mx-auto">
+            EduPortal is a world-class admissions portal engineered to streamline and digitize college application processes for prospective students around the globe.
+        </p>
+    </div>
+</section>
+
+<div class="container mx-auto px-gutter py-md">
+    <!-- Mission & Vision Section -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-lg mb-xl">
+        <div class="bg-surface-container-lowest border border-outline-variant/30 rounded-3xl p-lg shadow-sm hover:shadow-md transition-shadow relative overflow-hidden flex flex-col justify-between">
+            <div class="absolute -right-12 -top-12 w-32 h-32 bg-primary/5 rounded-full blur-2xl"></div>
+            <div>
+                <div class="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-md">
+                    <span class="material-symbols-outlined text-[28px]">flag</span>
+                </div>
+                <h2 class="font-headline-md text-headline-md font-bold text-on-surface mb-sm">Our Mission</h2>
+                <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                    To make higher education accessible, transparent, and hassle-free. We strive to break geographical barriers, enabling students to find their desired career pathways and execute admissions processes completely online, with zero downtime and absolute security.
+                </p>
+            </div>
+            <div class="mt-md pt-md border-t border-outline-variant/20 flex items-center gap-xs text-primary font-semibold text-body-sm">
+                <span class="material-symbols-outlined text-[18px]">verified</span> Empowering Student Ambitions
+            </div>
+        </div>
+
+        <div class="bg-surface-container-lowest border border-outline-variant/30 rounded-3xl p-lg shadow-sm hover:shadow-md transition-shadow relative overflow-hidden flex flex-col justify-between">
+            <div class="absolute -right-12 -top-12 w-32 h-32 bg-secondary/5 rounded-full blur-2xl"></div>
+            <div>
+                <div class="w-12 h-12 rounded-xl bg-secondary/10 text-secondary flex items-center justify-center mb-md">
+                    <span class="material-symbols-outlined text-[28px]">visibility</span>
+                </div>
+                <h2 class="font-headline-md text-headline-md font-bold text-on-surface mb-sm">Our Vision</h2>
+                <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                    To build a global academic ecosystem powered by smart automation. By introducing secure real-time verification and digital workspaces, we envision a future where administrative friction is completely eliminated, allowing students to focus purely on academic growth.
+                </p>
+            </div>
+            <div class="mt-md pt-md border-t border-outline-variant/20 flex items-center gap-xs text-secondary font-semibold text-body-sm">
+                <span class="material-symbols-outlined text-[18px]">workspace_premium</span> Global Academic Ecosystem
+            </div>
+        </div>
+    </div>
+
+    <!-- Core Technology Pillars -->
+    <div class="mb-xl">
+        <div class="text-center mb-lg">
+            <span class="font-label-md text-label-md text-primary uppercase tracking-widest font-bold">Why Choose EduPortal</span>
+            <h2 class="font-headline-lg text-headline-lg font-bold text-on-background mt-1">Smart Admission Architecture</h2>
+            <p class="font-body-md text-body-md text-on-surface-variant max-w-xl mx-auto mt-1">Our platform is designed to provide maximum transparency and ease to candidates throughout their counseling lifecycle.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-md">
+            <!-- Pillar 1 -->
+            <div class="bg-surface-container-lowest border border-outline-variant/20 rounded-2xl p-md shadow-sm hover:shadow-md transition-all">
+                <div class="w-10 h-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center mb-md">
+                    <span class="material-symbols-outlined text-[24px]">verified_user</span>
+                </div>
+                <h3 class="font-body-lg font-bold text-on-surface mb-xs">Secure Profile Registry</h3>
+                <p class="text-body-sm text-on-surface-variant leading-relaxed">Candidate data is strongly protected and encrypted, adhering to global privacy standards.</p>
+            </div>
+
+            <!-- Pillar 2 -->
+            <div class="bg-surface-container-lowest border border-outline-variant/20 rounded-2xl p-md shadow-sm hover:shadow-md transition-all">
+                <div class="w-10 h-10 rounded-lg bg-secondary/10 text-secondary flex items-center justify-center mb-md">
+                    <span class="material-symbols-outlined text-[24px]">upload_file</span>
+                </div>
+                <h3 class="font-body-lg font-bold text-on-surface mb-xs">Fast Document Upload</h3>
+                <p class="text-body-sm text-on-surface-variant leading-relaxed">Integrated file upload interface supporting grade sheets, photo registry, and signatures.</p>
+            </div>
+
+            <!-- Pillar 3 -->
+            <div class="bg-surface-container-lowest border border-outline-variant/20 rounded-2xl p-md shadow-sm hover:shadow-md transition-all">
+                <div class="w-10 h-10 rounded-lg bg-tertiary/10 text-tertiary flex items-center justify-center mb-md">
+                    <span class="material-symbols-outlined text-[24px]">notifications_active</span>
+                </div>
+                <h3 class="font-body-lg font-bold text-on-surface mb-xs">Real-Time Tracking</h3>
+                <p class="text-body-sm text-on-surface-variant leading-relaxed">Get instant feedback on application verification, status updates, and dean approvals.</p>
+            </div>
+
+            <!-- Pillar 4 -->
+            <div class="bg-surface-container-lowest border border-outline-variant/20 rounded-2xl p-md shadow-sm hover:shadow-md transition-all">
+                <div class="w-10 h-10 rounded-lg bg-amber-500/10 text-amber-700 flex items-center justify-center mb-md">
+                    <span class="material-symbols-outlined text-[24px]">support_agent</span>
+                </div>
+                <h3 class="font-body-lg font-bold text-on-surface mb-xs">Counselor Inquiries</h3>
+                <p class="text-body-sm text-on-surface-variant leading-relaxed">Dedicated help desk channel for direct resolution of course queries and technical issues.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Milestones Timeline -->
+    <div class="mb-xl max-w-4xl mx-auto">
+        <div class="text-center mb-lg">
+            <span class="font-label-md text-label-md text-primary uppercase tracking-widest font-bold">Our Timeline</span>
+            <h2 class="font-headline-lg text-headline-lg font-bold text-on-background mt-1">Growth & Milestones</h2>
+        </div>
+
+        <div class="relative border-l border-outline-variant/50 ml-6 space-y-lg py-md">
+            <!-- Timeline Item 1 -->
+            <div class="relative pl-8">
+                <!-- Dot indicator -->
+                <span class="absolute -left-2 top-1.5 w-4 h-4 rounded-full bg-[#FFBA00] border-2 border-white shadow shadow-black/20"></span>
+                <div>
+                    <span class="font-display-lg text-headline-md font-bold text-primary">1985</span>
+                    <h4 class="font-headline-sm text-body-lg font-bold text-on-surface mt-xs">Foundation of University Department</h4>
+                    <p class="text-body-sm text-on-surface-variant mt-1 leading-relaxed">
+                        Started operations as a specialized Academy of Information Technology and Applied Sciences with 10 faculty members and 100 students.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Timeline Item 2 -->
+            <div class="relative pl-8">
+                <span class="absolute -left-2 top-1.5 w-4 h-4 rounded-full bg-[#FFBA00] border-2 border-white shadow shadow-black/20"></span>
+                <div>
+                    <span class="font-display-lg text-headline-md font-bold text-primary">2000</span>
+                    <h4 class="font-headline-sm text-body-lg font-bold text-on-surface mt-xs">Curriculum Expansion & Accreditations</h4>
+                    <p class="text-body-sm text-on-surface-variant mt-1 leading-relaxed">
+                        Added degree pathways in Business Administration, humanities, and post-graduate studies. Achieved Grade-A national accreditation.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Timeline Item 3 -->
+            <div class="relative pl-8">
+                <span class="absolute -left-2 top-1.5 w-4 h-4 rounded-full bg-[#FFBA00] border-2 border-white shadow shadow-black/20"></span>
+                <div>
+                    <span class="font-display-lg text-headline-md font-bold text-primary">2015</span>
+                    <h4 class="font-headline-sm text-body-lg font-bold text-on-surface mt-xs">Digital Transformation Phase</h4>
+                    <p class="text-body-sm text-on-surface-variant mt-1 leading-relaxed">
+                        Migrated student files to custom internal database system, introducing online course registration for enrolled candidates.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Timeline Item 4 -->
+            <div class="relative pl-8">
+                <span class="absolute -left-2 top-1.5 w-4 h-4 rounded-full bg-[#FFBA00] border-2 border-white shadow shadow-black/20"></span>
+                <div>
+                    <span class="font-display-lg text-headline-md font-bold text-primary">2026</span>
+                    <h4 class="font-headline-sm text-body-lg font-bold text-on-surface mt-xs">EduPortal command center launch</h4>
+                    <p class="text-body-sm text-on-surface-variant mt-1 leading-relaxed">
+                        Introduced the fully integrated admissions pipeline supporting real-time tracking, counselor help desk, and paperless administrative approval.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

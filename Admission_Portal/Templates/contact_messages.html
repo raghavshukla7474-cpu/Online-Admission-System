@@ -1,0 +1,170 @@
+{% extends 'base.html' %}
+{% block title %}Contact Inquiries Console | EduPortal{% endblock %}
+{% block content %}
+<div class="container mx-auto px-gutter py-md">
+    <!-- Page Header -->
+    <div class="mb-lg">
+        <span class="font-label-md text-label-md text-primary uppercase tracking-widest font-bold">Inquiry Management</span>
+        <h1 class="font-display-lg text-display-lg text-on-background mt-1 font-bold">Contact Inquiries Console</h1>
+        <p class="font-body-lg text-body-lg text-on-surface-variant mt-1">Review, follow up, and manage help desk inquiries submitted by students and prospective applicants.</p>
+    </div>
+
+    <!-- Stat Cards Panel -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-md mb-lg">
+        <!-- Card 1: Total -->
+        <div class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-md shadow-sm hover:shadow-md transition-shadow">
+            <div class="flex items-center justify-between">
+                <div>
+                    <span class="text-[10px] text-on-surface-variant uppercase tracking-widest font-bold block mb-1">Total Inquiries</span>
+                    <h2 class="font-display-lg text-headline-lg font-bold text-on-surface">{{ stats.total }}</h2>
+                </div>
+                <div class="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
+                    <span class="material-symbols-outlined text-[28px]">forum</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Card 2: Pending -->
+        <div class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-md shadow-sm hover:shadow-md transition-shadow">
+            <div class="flex items-center justify-between">
+                <div>
+                    <span class="text-[10px] text-on-surface-variant uppercase tracking-widest font-bold block mb-1">Awaiting Review</span>
+                    <h2 class="font-display-lg text-headline-lg font-bold text-amber-600">{{ stats.pending }}</h2>
+                </div>
+                <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-600 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-[28px]">mark_as_unread</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 3: Resolved -->
+        <div class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-md shadow-sm hover:shadow-md transition-shadow">
+            <div class="flex items-center justify-between">
+                <div>
+                    <span class="text-[10px] text-on-surface-variant uppercase tracking-widest font-bold block mb-1">Resolved Queries</span>
+                    <h2 class="font-display-lg text-headline-lg font-bold text-emerald-600">{{ stats.resolved }}</h2>
+                </div>
+                <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-[28px]">check_circle</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter Tabs Panel -->
+    <div class="flex border-b border-outline-variant/30 mb-lg">
+        <a href="?status=all" class="px-6 py-3 font-body-sm text-body-sm font-semibold transition-all duration-200 border-b-2 {% if status_filter == 'all' %}border-primary text-primary font-bold{% else %}border-transparent text-on-surface-variant hover:text-primary{% endif %}">
+            All Inquiries ({{ stats.total }})
+        </a>
+        <a href="?status=pending" class="px-6 py-3 font-body-sm text-body-sm font-semibold transition-all duration-200 border-b-2 {% if status_filter == 'pending' %}border-primary text-primary font-bold{% else %}border-transparent text-on-surface-variant hover:text-primary{% endif %}">
+            Pending ({{ stats.pending }})
+        </a>
+        <a href="?status=resolved" class="px-6 py-3 font-body-sm text-body-sm font-semibold transition-all duration-200 border-b-2 {% if status_filter == 'resolved' %}border-primary text-primary font-bold{% else %}border-transparent text-on-surface-variant hover:text-primary{% endif %}">
+            Resolved ({{ stats.resolved }})
+        </a>
+    </div>
+
+    <!-- Inquiries Log Panel -->
+    <div class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl overflow-hidden shadow-sm flex flex-col">
+        <div class="px-lg py-md border-b border-outline-variant/20 bg-surface-container-low">
+            <h3 class="font-headline-sm text-headline-sm font-bold text-on-surface">Help Desk Log</h3>
+        </div>
+        <div class="p-lg">
+            {% if inquiries %}
+                <div class="overflow-x-auto custom-scrollbar">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b border-outline-variant/30 text-on-surface-variant font-label-md text-label-md">
+                                <th class="pb-3 font-semibold uppercase tracking-wider">Sender</th>
+                                <th class="pb-3 font-semibold uppercase tracking-wider">Contact Info</th>
+                                <th class="pb-3 font-semibold uppercase tracking-wider">Subject & Message</th>
+                                <th class="pb-3 font-semibold uppercase tracking-wider">Submitted At</th>
+                                <th class="pb-3 font-semibold uppercase tracking-wider text-center">Status</th>
+                                <th class="pb-3 font-semibold uppercase tracking-wider text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-outline-variant/10">
+                            {% for inquiry in inquiries %}
+                            <tr class="hover:bg-surface-container-low/50 transition-colors">
+                                <!-- Sender name -->
+                                <td class="py-4 font-bold text-on-surface align-top whitespace-nowrap">{{ inquiry.name }}</td>
+                                
+                                <!-- Contact info -->
+                                <td class="py-4 align-top">
+                                    <div class="flex flex-col text-body-sm">
+                                        <a href="mailto:{{ inquiry.email }}" class="font-semibold text-primary hover:underline flex items-center gap-0.5">
+                                            <span class="material-symbols-outlined text-[14px]">mail</span> {{ inquiry.email }}
+                                        </a>
+                                        {% if inquiry.phone %}
+                                            <span class="text-on-surface-variant font-medium flex items-center gap-0.5 mt-0.5">
+                                                <span class="material-symbols-outlined text-[14px]">phone</span> {{ inquiry.phone }}
+                                            </span>
+                                        {% else %}
+                                            <span class="text-on-surface-variant/40 italic flex items-center gap-0.5 mt-0.5">
+                                                <span class="material-symbols-outlined text-[14px]">phone</span> None
+                                            </span>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                                
+                                <!-- Subject & Message body -->
+                                <td class="py-4 align-top max-w-md">
+                                    <div class="flex flex-col">
+                                        <span class="font-bold text-on-surface text-body-sm leading-tight mb-1">{{ inquiry.subject }}</span>
+                                        <p class="text-on-surface-variant text-body-sm leading-relaxed whitespace-pre-line">{{ inquiry.message }}</p>
+                                    </div>
+                                </td>
+                                
+                                <!-- Date time -->
+                                <td class="py-4 text-on-surface-variant font-body-sm align-top whitespace-nowrap">{{ inquiry.created_at|date:"Y-m-d H:i" }}</td>
+                                
+                                <!-- Status badge -->
+                                <td class="py-4 text-center align-top select-none">
+                                    {% if inquiry.is_resolved %}
+                                        <span class="inline-flex items-center gap-0.5 bg-emerald-50 text-emerald-800 border border-emerald-200 text-body-xs font-bold px-3 py-1 rounded-full">
+                                            Resolved
+                                        </span>
+                                    {% else %}
+                                        <span class="inline-flex items-center gap-0.5 bg-amber-50 text-amber-800 border border-amber-200 text-body-xs font-bold px-3 py-1 rounded-full">
+                                            Pending
+                                        </span>
+                                    {% endif %}
+                                </td>
+                                
+                                <!-- Actions -->
+                                <td class="py-4 text-center align-top select-none">
+                                    <div class="flex flex-col sm:flex-row items-center justify-center gap-2">
+                                        {% if inquiry.is_resolved %}
+                                            <a href="{% url 'contact_message_toggle_resolved' inquiry.id %}" class="bg-surface-container border border-outline-variant hover:bg-amber-50 hover:text-amber-800 hover:border-amber-200 text-on-surface-variant font-bold px-3 py-1.5 rounded-full text-body-xs transition-all inline-flex items-center gap-0.5 shadow-sm whitespace-nowrap">
+                                                <span class="material-symbols-outlined text-[14px]">undo</span> Mark Pending
+                                            </a>
+                                        {% else %}
+                                            <a href="{% url 'contact_message_toggle_resolved' inquiry.id %}" class="bg-emerald-50 border border-emerald-200 hover:bg-emerald-600 hover:text-white text-emerald-700 font-bold px-3 py-1.5 rounded-full text-body-xs transition-all inline-flex items-center gap-0.5 shadow-sm whitespace-nowrap">
+                                                <span class="material-symbols-outlined text-[14px]">check</span> Resolve Inquiry
+                                            </a>
+                                        {% endif %}
+                                        
+                                        <form method="POST" action="{% url 'contact_message_delete' inquiry.id %}" onsubmit="return confirm('Are you sure you want to permanently delete this inquiry?');" class="inline">
+                                            {% csrf_token %}
+                                            <button type="submit" class="bg-rose-50 border border-rose-200 hover:bg-rose-600 hover:text-white text-rose-700 font-bold px-3 py-1.5 rounded-full text-body-xs transition-all inline-flex items-center gap-0.5 shadow-sm whitespace-nowrap">
+                                                <span class="material-symbols-outlined text-[14px]">delete</span> Delete
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="text-center py-12 flex flex-col items-center justify-center">
+                    <span class="material-symbols-outlined text-[64px] text-outline">search_off</span>
+                    <h4 class="font-headline-sm text-on-surface font-bold mt-3">No Inquiries Found</h4>
+                    <p class="text-body-sm text-on-surface-variant max-w-sm mt-1">There are no contact inquiries matching the selected filter.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

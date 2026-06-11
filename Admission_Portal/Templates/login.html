@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% block title %}Sign In | EduPortal{% endblock %}
+{% block extra_css %}
+<style>
+    .glass-card {
+        background: rgba(255, 255, 255, 0.7);
+        -webkit-backdrop-filter: blur(20px);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 8px 32px 0 rgba(12, 59, 46, 0.05);
+    }
+    .bg-gradient-edu {
+        background: linear-gradient(135deg, #6d9773 0%, #0c3b2e 100%);
+    }
+    .hero-pattern {
+        background-color: #0c3b2e;
+        background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.05) 1px, transparent 0);
+        background-size: 32px 32px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="min-h-[85vh] flex flex-col md:flex-row overflow-hidden -mt-20">
+    <!-- Left Section: Visual Identity -->
+    <section class="hidden md:flex md:w-1/2 bg-gradient-edu relative items-center justify-center p-lg overflow-hidden hero-pattern">
+        <div class="absolute top-20 left-20 w-32 h-32 rounded-full bg-primary-fixed/10 blur-3xl animate-pulse"></div>
+        <div class="absolute bottom-20 right-20 w-48 h-48 rounded-full bg-secondary-fixed/10 blur-3xl animate-pulse"></div>
+        
+        <div class="relative z-10 text-center max-w-lg">
+            <div class="mb-md flex justify-center">
+                <svg class="h-24 w-24 drop-shadow-2xl" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="200" height="200" rx="40" fill="#0C3B2E"/>
+                    <path d="M100 45L40 75L100 105L160 75L100 45Z" fill="#FFBA00"/>
+                    <path d="M40 75V125C40 125 40 155 100 155C160 155 160 125 160 125V75L100 105L40 75Z" fill="#6D9773"/>
+                    <circle cx="100" cy="100" r="15" fill="#BB8A52" opacity="0.8"/>
+                </svg>
+            </div>
+            <h1 class="font-display-lg text-display-lg text-white mb-sm">EduPortal</h1>
+            <p class="font-body-lg text-body-lg text-primary-fixed-dim opacity-90 leading-relaxed">
+                Nurturing the leaders of tomorrow through academic excellence and a sophisticated learning environment. Join our prestigious global community.
+            </p>
+            
+            <div class="mt-lg grid grid-cols-2 gap-md text-left">
+                <div class="p-md rounded-xl bg-white/10 backdrop-blur-sm border border-white/10">
+                    <span class="material-symbols-outlined text-[#FFBA00] mb-xs material-symbols-filled">school</span>
+                    <div class="text-white font-headline-sm text-headline-sm">15k+</div>
+                    <div class="text-white/60 font-label-md text-label-md">Global Alumni</div>
+                </div>
+                <div class="p-md rounded-xl bg-white/10 backdrop-blur-sm border border-white/10">
+                    <span class="material-symbols-outlined text-[#FFBA00] mb-xs material-symbols-filled">workspace_premium</span>
+                    <div class="text-white font-headline-sm text-headline-sm">Top 50</div>
+                    <div class="text-white/60 font-label-md text-label-md">Global Ranking</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="absolute inset-0 z-0 opacity-20 pointer-events-none mix-blend-overlay">
+            <img class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1507679799987-c73779587ccf?q=80&w=600&auto=format&fit=crop" alt="EduPortal campus visual"/>
+        </div>
+    </section>
+
+    <!-- Right Section: Authentication Form -->
+    <section class="flex-grow flex flex-col items-center justify-center p-gutter relative bg-surface-container-low min-h-[600px] md:min-h-0">
+        <!-- Main Form Container -->
+        <div class="w-full max-w-md glass-card rounded-xl p-md md:p-lg border border-outline-variant/30 transition-all duration-500">
+            <!-- Toggle Controls (Login Selected) -->
+            <div class="flex items-center justify-center mb-lg bg-surface-container rounded-full p-xs w-full max-w-[280px] mx-auto select-none">
+                <a class="flex-1 text-center py-1.5 px-md rounded-full text-label-md font-label-md transition-all duration-300 bg-primary text-on-primary shadow-sm" href="{% url 'login' %}">
+                    Login
+                </a>
+                <a class="flex-1 text-center py-1.5 px-md rounded-full text-label-md font-label-md transition-all duration-300 text-on-surface-variant hover:text-primary" href="{% url 'register' %}">
+                    Register
+                </a>
+            </div>
+
+            <!-- Login Form -->
+            <div class="space-y-md animate-in fade-in slide-in-from-bottom-4 duration-500">
+                <div class="text-center mb-md">
+                    <h2 class="font-headline-md text-headline-md text-on-surface">Welcome Back</h2>
+                    <p class="font-body-sm text-body-sm text-on-surface-variant">Please enter your credentials to access your student/admin portal.</p>
+                </div>
+                
+                <form class="space-y-md" method="POST" autocomplete="on">
+                    {% csrf_token %}
+                    
+                    <div class="space-y-xs">
+                        <label class="font-label-md text-label-md text-on-surface-variant ml-xs">Username</label>
+                        <div class="relative group">
+                            <span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors">alternate_email</span>
+                            <input class="w-full pl-xl pr-md py-sm bg-surface-container border-2 border-transparent focus:border-primary focus:bg-white rounded-lg transition-all outline-none text-body-md font-body-md" 
+                                   placeholder="Username" 
+                                   type="text" 
+                                   name="username" 
+                                   required 
+                                   value="{{ form.username.value|default:'' }}"/>
+                        </div>
+                        {% if form.username.errors %}
+                            <p class="text-error text-body-sm mt-1">{{ form.username.errors.as_text }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="space-y-xs">
+                        <label class="font-label-md text-label-md text-on-surface-variant ml-xs">Password</label>
+                        <div class="relative group">
+                            <span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors">lock</span>
+                            <input class="w-full pl-xl pr-md py-sm bg-surface-container border-2 border-transparent focus:border-primary focus:bg-white rounded-lg transition-all outline-none text-body-md font-body-md" 
+                                   placeholder="••••••••" 
+                                   type="password" 
+                                   name="password" 
+                                   required/>
+                        </div>
+                        {% if form.password.errors %}
+                            <p class="text-error text-body-sm mt-1">{{ form.password.errors.as_text }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <button class="w-full py-3 bg-secondary hover:bg-primary text-white font-headline-sm text-headline-sm rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform active:scale-[0.98] mt-4" type="submit">
+                        Sign In
+                    </button>
+                </form>
+                
+                <div class="text-center pt-md border-t border-outline-variant/20 mt-md">
+                    <span class="font-body-sm text-body-sm text-on-surface-variant">Don't have an account? </span>
+                    <a class="font-body-sm text-body-sm text-primary font-bold hover:underline" href="{% url 'register' %}">Create one now</a>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}

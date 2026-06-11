@@ -1,0 +1,219 @@
+{% extends 'base.html' %}
+{% block title %}Admissions Command Console | EduPortal{% endblock %}
+{% block content %}
+<div class="container mx-auto px-gutter py-md">
+    <!-- Page Header -->
+    <div class="mb-lg flex flex-col md:flex-row justify-between items-start md:items-end gap-md">
+        <div>
+            <span class="font-label-md text-label-md text-primary uppercase tracking-widest font-bold">Admissions Administration</span>
+            <h1 class="font-display-lg text-display-lg text-on-background mt-1 font-bold">Admissions Command Console</h1>
+            <p class="font-body-lg text-body-lg text-on-surface-variant mt-1">Review student applications, upload folders, and approve/reject entries.</p>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-sm shrink-0 w-full md:w-auto">
+            <a href="{% url 'contact_messages' %}" class="bg-primary hover:bg-primary-container text-white font-bold px-6 py-3 rounded-lg text-body-sm transition-all flex items-center gap-1.5 shadow-sm justify-center">
+                <span class="material-symbols-outlined text-[18px]">forum</span> 
+                Student Inquiries
+                {% if pending_inquiries > 0 %}
+                    <span class="inline-flex items-center justify-center bg-amber-500 text-on-tertiary-fixed text-[10px] font-extrabold h-5 px-1.5 rounded-full animate-pulse">{{ pending_inquiries }} new</span>
+                {% endif %}
+            </a>
+            <a href="{% url 'admin_reports' %}" class="bg-[#FFBA00] hover:bg-[#E6A800] text-on-tertiary-fixed font-bold px-6 py-3 rounded-lg text-body-sm transition-all flex items-center gap-1 shadow-sm justify-center">
+                <span class="material-symbols-outlined text-[18px]">download_for_offline</span> Export Approved List (CSV)
+            </a>
+        </div>
+    </div>
+
+    <!-- Stat Cards Panel -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-md mb-lg">
+        <!-- Card 1: Total -->
+        <div class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-md shadow-sm hover:shadow-md transition-shadow">
+            <div class="flex items-center justify-between">
+                <div>
+                    <span class="text-[10px] text-on-surface-variant uppercase tracking-widest font-bold block mb-1">Total Submissions</span>
+                    <h2 class="font-display-lg text-headline-lg font-bold text-on-surface">{{ stats.total }}</h2>
+                </div>
+                <div class="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
+                    <span class="material-symbols-outlined text-[28px]">folder_open</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Card 2: Pending -->
+        <div class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-md shadow-sm hover:shadow-md transition-shadow">
+            <div class="flex items-center justify-between">
+                <div>
+                    <span class="text-[10px] text-on-surface-variant uppercase tracking-widest font-bold block mb-1">Awaiting Review</span>
+                    <h2 class="font-display-lg text-headline-lg font-bold text-amber-600">{{ stats.pending }}</h2>
+                </div>
+                <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-600 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-[28px]">pending_actions</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 3: Approved -->
+        <div class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-md shadow-sm hover:shadow-md transition-shadow">
+            <div class="flex items-center justify-between">
+                <div>
+                    <span class="text-[10px] text-on-surface-variant uppercase tracking-widest font-bold block mb-1">Enrolled Students</span>
+                    <h2 class="font-display-lg text-headline-lg font-bold text-emerald-600">{{ stats.approved }}</h2>
+                </div>
+                <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-[28px]">check_circle</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 4: Rejected -->
+        <div class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-md shadow-sm hover:shadow-md transition-shadow">
+            <div class="flex items-center justify-between">
+                <div>
+                    <span class="text-[10px] text-on-surface-variant uppercase tracking-widest font-bold block mb-1">Declined Entries</span>
+                    <h2 class="font-display-lg text-headline-lg font-bold text-rose-600">{{ stats.rejected }}</h2>
+                </div>
+                <div class="w-12 h-12 rounded-xl bg-rose-500/10 text-rose-600 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-[28px]">cancel</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter Control Card -->
+    <div class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-md shadow-sm mb-lg">
+        <form method="GET" class="grid grid-cols-1 md:grid-cols-12 gap-md items-end">
+            <!-- Search -->
+            <div class="md:col-span-4 space-y-xs">
+                <label class="font-label-md text-label-md text-on-surface-variant ml-xs">Search Applicant</label>
+                <div class="relative group">
+                    <span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors">search</span>
+                    <input class="w-full pl-xl pr-md py-2 bg-surface-container border-2 border-transparent focus:border-primary focus:bg-white rounded-lg transition-all outline-none text-body-sm font-body-sm" 
+                           placeholder="Name, username, or App ID..." 
+                           type="text" 
+                           name="q" 
+                           value="{{ q }}"/>
+                </div>
+            </div>
+            
+            <!-- Course Selector -->
+            <div class="md:col-span-3 space-y-xs">
+                <label class="font-label-md text-label-md text-on-surface-variant ml-xs">Course Specialization</label>
+                <select name="course" class="w-full px-md py-2 bg-surface-container border-2 border-transparent focus:border-primary focus:bg-white rounded-lg transition-all outline-none text-body-sm font-body-sm cursor-pointer">
+                    <option value="">All Courses</option>
+                    {% for course in courses %}
+                        <option value="{{ course.id }}" {% if course_filter == course.id|stringformat:"s" %}selected{% endif %}>{{ course.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Status Selector -->
+            <div class="md:col-span-3 space-y-xs">
+                <label class="font-label-md text-label-md text-on-surface-variant ml-xs">Evaluation Status</label>
+                <select name="status" class="w-full px-md py-2 bg-surface-container border-2 border-transparent focus:border-primary focus:bg-white rounded-lg transition-all outline-none text-body-sm font-body-sm cursor-pointer">
+                    <option value="">All Statuses</option>
+                    <option value="Pending" {% if status_filter == 'Pending' %}selected{% endif %}>Pending Review</option>
+                    <option value="Approved" {% if status_filter == 'Approved' %}selected{% endif %}>Approved</option>
+                    <option value="Rejected" {% if status_filter == 'Rejected' %}selected{% endif %}>Rejected</option>
+                </select>
+            </div>
+
+            <!-- Actions buttons -->
+            <div class="md:col-span-2 flex gap-sm select-none">
+                <button type="submit" class="flex-1 bg-primary hover:bg-primary-container text-white text-center font-bold py-2 px-4 rounded-lg text-body-sm transition-all flex items-center justify-center">
+                    Filter
+                </button>
+                <a href="{% url 'admin_dashboard' %}" class="flex-1 bg-surface-container border border-outline-variant hover:bg-surface-container-high text-on-surface-variant text-center font-bold py-2 px-4 rounded-lg text-body-sm transition-all flex items-center justify-center">
+                    Reset
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Submissions Log Panel -->
+    <div class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl overflow-hidden shadow-sm flex flex-col">
+        <div class="px-lg py-md border-b border-outline-variant/20 flex justify-between items-center bg-surface-container-low">
+            <h3 class="font-headline-sm text-headline-sm font-bold text-on-surface">Prospective Student Admissions Log</h3>
+        </div>
+        <div class="p-lg">
+            {% if applications %}
+                <div class="overflow-x-auto custom-scrollbar">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b border-outline-variant/30 text-on-surface-variant font-label-md text-label-md">
+                                <th class="pb-3 font-semibold uppercase tracking-wider">App Number</th>
+                                <th class="pb-3 font-semibold uppercase tracking-wider">Student Profile</th>
+                                <th class="pb-3 font-semibold uppercase tracking-wider">Pathway</th>
+                                <th class="pb-3 font-semibold uppercase tracking-wider">Submitted</th>
+                                <th class="pb-3 font-semibold uppercase tracking-wider">Files</th>
+                                <th class="pb-3 font-semibold uppercase tracking-wider text-center">Status</th>
+                                <th class="pb-3 font-semibold uppercase tracking-wider text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-outline-variant/10">
+                            {% for app in applications %}
+                            <tr class="hover:bg-surface-container-low/50 transition-colors">
+                                <td class="py-4 font-bold text-primary">{{ app.application_number }}</td>
+                                <td class="py-4">
+                                    <div class="flex flex-col">
+                                        <span class="font-bold text-on-surface">{{ app.student.user.first_name }} {{ app.student.user.last_name }}</span>
+                                        <span class="text-body-xs font-semibold text-on-surface-variant break-all flex items-center gap-0.5">
+                                            <span class="material-symbols-outlined text-[12px]">mail</span> {{ app.student.user.email }}
+                                        </span>
+                                    </div>
+                                </td>
+                                <td class="py-4">
+                                    <div class="flex flex-col">
+                                        <span class="font-bold text-on-surface leading-tight">{{ app.course.name }}</span>
+                                        <span class="text-[10px] font-semibold text-on-surface-variant uppercase tracking-wider mt-0.5">{{ app.course.code }}</span>
+                                    </div>
+                                </td>
+                                <td class="py-4 text-on-surface-variant font-body-sm">{{ app.submission_date|date:"Y-m-d H:i" }}</td>
+                                <td class="py-4">
+                                    <span class="inline-flex items-center gap-0.5 bg-primary/10 text-primary border border-primary/20 text-body-xs font-semibold px-2.5 py-1 rounded-full">
+                                        <span class="material-symbols-outlined text-[14px]">attach_file</span> {{ app.documents.count }} uploaded
+                                    </span>
+                                </td>
+                                <td class="py-4 text-center">
+                                    {% if app.status == 'Pending' %}
+                                        <span class="inline-flex items-center gap-0.5 bg-amber-50 text-amber-800 border border-amber-200 text-body-xs font-bold px-3 py-1 rounded-full">
+                                            Pending
+                                        </span>
+                                    {% elif app.status == 'Approved' %}
+                                        <span class="inline-flex items-center gap-0.5 bg-emerald-50 text-emerald-800 border border-emerald-200 text-body-xs font-bold px-3 py-1 rounded-full">
+                                            Approved
+                                        </span>
+                                    {% else %}
+                                        <span class="inline-flex items-center gap-0.5 bg-rose-50 text-rose-800 border border-rose-200 text-body-xs font-bold px-3 py-1 rounded-full">
+                                            Rejected
+                                        </span>
+                                    {% endif %}
+                                </td>
+                                <td class="py-4 text-center select-none">
+                                    <div class="flex items-center justify-center gap-2">
+                                        <a href="{% url 'admin_application_detail' app.id %}" class="bg-surface-container border border-outline-variant hover:bg-primary/10 hover:text-primary hover:border-primary/20 text-on-surface-variant font-bold px-4 py-1.5 rounded-full text-body-xs transition-all inline-flex items-center gap-0.5 shadow-sm">
+                                            <span class="material-symbols-outlined text-[14px]">edit_note</span> Review
+                                        </a>
+                                        <form method="POST" action="{% url 'admin_delete_student' app.student.id %}" onsubmit="return confirm('Are you sure you want to permanently delete this student ({{ app.student.user.first_name }} {{ app.student.user.last_name }}) and all their associated data?');" class="inline">
+                                            {% csrf_token %}
+                                            <button type="submit" class="bg-rose-50 border border-rose-200 hover:bg-rose-600 hover:text-white text-rose-700 font-bold px-4 py-1.5 rounded-full text-body-xs transition-all inline-flex items-center gap-0.5 shadow-sm">
+                                                <span class="material-symbols-outlined text-[14px]">delete</span> Delete
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="text-center py-12 flex flex-col items-center justify-center">
+                    <span class="material-symbols-outlined text-[64px] text-outline">search_off</span>
+                    <h4 class="font-headline-sm text-on-surface font-bold mt-3">No Admission Requests Found</h4>
+                    <p class="text-body-sm text-on-surface-variant max-w-sm mt-1">Applications matching your selected queries or search criteria were not found.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
